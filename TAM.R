@@ -1,15 +1,15 @@
-#добавлением в датасет параметров параметры новых заданий
+#РґРѕР±Р°РІР»РµРЅРёРµРј РІ РґР°С‚Р°СЃРµС‚ РїР°СЂР°РјРµС‚СЂРѕРІ РїР°СЂР°РјРµС‚СЂС‹ РЅРѕРІС‹С… Р·Р°РґР°РЅРёР№
 
 library(TAM)
-setwd("C:/Users/Алексей/Downloads")#устанавливаем рабочую директорию
-Data=read.csv('bts.csv',sep=';')#читаем файл с ответами, sep устанавливаем в зависимости от формата
-Data[32]=NULL#удаление столбца с суммой баллов
-Data[1]=NULL#удаление столбца с фамилиями
-model_2pl=TAM::tam.mml.2pl(Data,irtmodel="2PL")#обучение модели
-newparams=as.data.frame(cbind(model_2pl$item$AXsi_.Cat1,
-                              model_2pl$item$B.Cat1.Dim1))#создание датасета с параметрами новых заданий
+setwd("C:/Users/РђР»РµРєСЃРµР№/Downloads")#СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЂР°Р±РѕС‡СѓСЋ РґРёСЂРµРєС‚РѕСЂРёСЋ
+Data=read.csv('bts.csv',sep=';')#С‡РёС‚Р°РµРј С„Р°Р№Р» СЃ РѕС‚РІРµС‚Р°РјРё, sep СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С„РѕСЂРјР°С‚Р°
+Data[32]=NULL#СѓРґР°Р»РµРЅРёРµ СЃС‚РѕР»Р±С†Р° СЃ СЃСѓРјРјРѕР№ Р±Р°Р»Р»РѕРІ
+Data[1]=NULL#СѓРґР°Р»РµРЅРёРµ СЃС‚РѕР»Р±С†Р° СЃ С„Р°РјРёР»РёСЏРјРё
+model_2pl=TAM::tam.mml.2pl(Data,irtmodel="2PL")#РѕР±СѓС‡РµРЅРёРµ РјРѕРґРµР»Рё
+newparams=as.data.frame(cbind(model_2pl$AXsi[,2],
+                              model_2pl$item$B.Cat1.Dim1))#СЃРѕР·РґР°РЅРёРµ РґР°С‚Р°СЃРµС‚Р° СЃ РїР°СЂР°РјРµС‚СЂР°РјРё РЅРѕРІС‹С… Р·Р°РґР°РЅРёР№
 oldparams=tryCatch({
-  as.data.frame(read.csv('ab2pl.csv',sep=';'))
+  as.data.frame(read.csv('ab2pl10.csv',sep=';'))
   },
                    warning=function(cond){
                      return(NULL)
@@ -17,7 +17,7 @@ oldparams=tryCatch({
                    error=function(cond){
                      return(NULL)
                      }
-                   )#считывание датафрейма с параметрами старых заданий, если его нет-NULL
+                   )#СЃС‡РёС‚С‹РІР°РЅРёРµ РґР°С‚Р°С„СЂРµР№РјР° СЃ РїР°СЂР°РјРµС‚СЂР°РјРё СЃС‚Р°СЂС‹С… Р·Р°РґР°РЅРёР№, РµСЃР»Рё РµРіРѕ РЅРµС‚-NULL
 d=tryCatch({
   rbind(oldparams,newparams)
   },
@@ -26,6 +26,6 @@ d=tryCatch({
     },
   error=function(cond){
     return(newparams)
-    })#конкатенирование таблиц
-row.names(newparams)=NULL#новые индексы по порядку
-write.table(newparams,'ab2pl.csv',sep=';')#запись файла
+    })#РєРѕРЅРєР°С‚РµРЅРёСЂРѕРІР°РЅРёРµ С‚Р°Р±Р»РёС†
+row.names(newparams)=NULL#РЅРѕРІС‹Рµ РёРЅРґРµРєСЃС‹ РїРѕ РїРѕСЂСЏРґРєСѓ
+write.table(newparams,'ab2pl10.csv',sep=';')#Р·Р°РїРёСЃСЊ С„Р°Р№Р»Р°
